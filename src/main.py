@@ -13,6 +13,7 @@ from datasets.h36m import H36M
 from datasets.mpii import MPII
 from utils.logger import Logger
 from train import train, val
+import logging
 
 def main():
   opt = opts().parse()
@@ -64,6 +65,8 @@ def main():
     logger.scalar_summary('acc_train', acc_train, epoch)
     logger.scalar_summary('mpjpe_train', mpjpe_train, epoch)
     logger.scalar_summary('loss3d_train', loss3d_train, epoch)
+
+    print('Epoch {}: loss_train = {}, acc_train = {}, mpjpe_train = {}, loss3d_train = {}'.format(epoch, loss_train, acc_train, mpjpe_train, loss3d_train))
     if epoch % opt.valIntervals == 0:
       loss_val, acc_val, mpjpe_val, loss3d_val = val(epoch, opt, val_loader, model, criterion)
       logger.scalar_summary('loss_val', loss_val, epoch)
