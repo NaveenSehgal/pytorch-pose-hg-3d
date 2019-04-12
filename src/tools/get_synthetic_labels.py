@@ -34,6 +34,8 @@ for fold in sub_folders:
 
 n_images = 0
 joints2d, joints3d, image_names, folder_names = np.array([]), np.array([]), np.array([]), np.array([])  # initialize empty arrays
+ids = np.array([]) 
+i = 0
 for folder in sub_folders:
 	folder_path = os.path.join(SYNTHETIC_FOLDER, folder)
 	j2d_file, j3d_file, image_dir = [os.path.join(folder_path, x) for x in ['joints_gt.mat', 'joints_gt3d.mat', 'images']]
@@ -43,6 +45,14 @@ for folder in sub_folders:
 	im_names.sort()  # Make sure going in increasing order
 	im_names = np.reshape(im_names, (len(im_names), 1))
 	fold_name = np.reshape([folder,] * len(im_names), (len(im_names), 1))
+    
+	if ids.size == 0:
+		max_ids = 0
+	max_ids = [-1 if ids.size == 0 else max(ids)][0]
+	start_id = max_ids + 1
+	stop_id = start_id + len(j2d)
+	id_list = np.arange(start_id, stop_id)
+	ids = np.append(ids, id_list)
 
 	# Append to grand list
 	joints2d = [np.vstack((joints2d, j2d)) if joints2d.size != 0 else j2d][0]
@@ -61,6 +71,7 @@ f['joint_2d'] = joints2d
 f['joint_3d_mono'] = joints3d
 f['image_name'] = image_names
 f['folder_name'] = folder_names
+f['id'] = ids
 f.attrs['synthetic_folder'] = np.string_(SYNTHETIC_FOLDER)
 f.close()
 
