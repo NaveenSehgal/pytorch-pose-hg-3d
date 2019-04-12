@@ -7,6 +7,7 @@ edges = [[0, 1], [1, 2], [2, 6], [6, 3], [3, 4], [4, 5],
          [6, 8], [8, 9]]
 
 h36mImgSize = 224
+synImgSize = 256
 
 outputRes = 64
 inputRes = 256
