@@ -24,6 +24,22 @@ import h5py
 import os
 import scipy.io as sio
 
+def convert(syn_joints):
+    ''' input format 14 x 2 '''
+    mpii_shape = list(syn_joints.shape)
+    if syn_joints.shape[0] != 14:
+        print('INCORRECT INPUT SHAPE INTO CONVERSION FUNCTION FROM SYN TO MPII')
+        exit(0)
+
+    mpii_shape[0] = 16
+    mpii = np.zeros(mpii_shape)
+    mpii[[0,1,2,3,4,5,7, 9, 10, 11,12,13,14, 15]] = syn_joints[[0,1,2,3,4,5, 12, 13, 6, 7, 8, 9, 10, 11]]
+    mpii[6] = np.mean(syn_joints[2:4, :], axis=0)
+    mpii[8] = syn_joints[12] + (syn_joints[13] - syn_joints[12]) / 3
+
+    return mpii
+ 
+
 SYNTHETIC_FOLDER = '/scratch/sehgal.n/datasets/synthetic'
 SAVE_PATH = '../../data/synthetic/'
 sub_folders = [os.path.join(SYNTHETIC_FOLDER, folder) for folder in os.listdir(SYNTHETIC_FOLDER) if os.path.isdir(os.path.join(SYNTHETIC_FOLDER, folder))]
@@ -41,8 +57,9 @@ i = 0
 for folder in sub_folders:
     folder_path = os.path.join(SYNTHETIC_FOLDER, folder)
     j2d_file, j3d_file, image_dir = [os.path.join(folder_path, x) for x in ['joints_gt.mat', 'joints_gt3d.mat', 'images']]
-    j2d = np.swapaxes(sio.loadmat(j2d_file)['joints_gt'], 2, 0)
-    j3d = np.swapaxes(sio.loadmat(j3d_file)['joints_gt3d'], 2, 0)
+    j2d = np.array([convert(x) for x in np.swapaxes(sio.loadmat(j2d_file)['joints_gt'], 2, 0)])
+    j3d = np.array([convert(x) for x in np.swapaxes(sio.loadmat(j3d_file)['joints_gt3d'], 2, 0)])
+
     im_names = os.listdir(image_dir)
     im_names.sort()  # Make sure going in increasing order
     im_names = np.reshape(im_names, (len(im_names), 1))
@@ -79,11 +96,4 @@ f['id'] = ids
 f['istrain'] = istrain
 f.attrs['synthetic_folder'] = np.string_(SYNTHETIC_FOLDER)
 f.close()
-
-
-
-
-
-
-
 
