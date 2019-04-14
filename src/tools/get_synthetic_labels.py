@@ -4,16 +4,16 @@ Takes in path of synthetic data folder and converts labels to h5 file
 structure your data as follows:
 
 SYNTHETIC_FOLDER:
-	-> SYN_RR_amir_....
-	-> SYN_RR_naveen_...
-		-> images
-		-> joints_gt.mat
-		-> joints_gt3d.mat
-		... 
-	..
-	..
-	..
-	-> SYN_RR_sarah_...
+    -> SYN_RR_amir_....
+    -> SYN_RR_naveen_...
+        -> images
+        -> joints_gt.mat
+        -> joints_gt3d.mat
+        ... 
+    ..
+    ..
+    ..
+    -> SYN_RR_sarah_...
 
 This file will then output the h5 file to datasets/synthetic.
 This file is analogous to GetH36M.py
@@ -27,38 +27,42 @@ import scipy.io as sio
 SYNTHETIC_FOLDER = '/scratch/sehgal.n/datasets/synthetic'
 SAVE_PATH = '../../data/synthetic/'
 sub_folders = [os.path.join(SYNTHETIC_FOLDER, folder) for folder in os.listdir(SYNTHETIC_FOLDER) if os.path.isdir(os.path.join(SYNTHETIC_FOLDER, folder))]
+FRAC_TRAIN = 0.8  # Make this proportion of samples designated for training
 
 print('Loading the following folders: ')
 for fold in sub_folders:
-	print(fold)
+    print(fold)
 
 n_images = 0
 joints2d, joints3d, image_names, folder_names = np.array([]), np.array([]), np.array([]), np.array([])  # initialize empty arrays
+istrain = np.array([])
 ids = np.array([]) 
 i = 0
 for folder in sub_folders:
-	folder_path = os.path.join(SYNTHETIC_FOLDER, folder)
-	j2d_file, j3d_file, image_dir = [os.path.join(folder_path, x) for x in ['joints_gt.mat', 'joints_gt3d.mat', 'images']]
-	j2d = np.swapaxes(sio.loadmat(j2d_file)['joints_gt'], 2, 0)
-	j3d = np.swapaxes(sio.loadmat(j3d_file)['joints_gt3d'], 2, 0)
-	im_names = os.listdir(image_dir)
-	im_names.sort()  # Make sure going in increasing order
-	im_names = np.reshape(im_names, (len(im_names), 1))
-	fold_name = np.reshape([folder,] * len(im_names), (len(im_names), 1))
+    folder_path = os.path.join(SYNTHETIC_FOLDER, folder)
+    j2d_file, j3d_file, image_dir = [os.path.join(folder_path, x) for x in ['joints_gt.mat', 'joints_gt3d.mat', 'images']]
+    j2d = np.swapaxes(sio.loadmat(j2d_file)['joints_gt'], 2, 0)
+    j3d = np.swapaxes(sio.loadmat(j3d_file)['joints_gt3d'], 2, 0)
+    im_names = os.listdir(image_dir)
+    im_names.sort()  # Make sure going in increasing order
+    im_names = np.reshape(im_names, (len(im_names), 1))
+    fold_name = np.reshape([folder,] * len(im_names), (len(im_names), 1))
     
-	if ids.size == 0:
-		max_ids = 0
-	max_ids = [-1 if ids.size == 0 else max(ids)][0]
-	start_id = max_ids + 1
-	stop_id = start_id + len(j2d)
-	id_list = np.arange(start_id, stop_id)
-	ids = np.append(ids, id_list)
+    if ids.size == 0:
+        max_ids = 0
+    max_ids = [-1 if ids.size == 0 else max(ids)][0]
+    start_id = max_ids + 1
+    stop_id = start_id + len(j2d)
+    id_list = np.arange(start_id, stop_id)
+    ids = np.append(ids, id_list)
+    is_train_0 = np.reshape((np.random.rand(len(j2d)) < FRAC_TRAIN).astype(int), (len(j2d), 1))
+    istrain = [np.vstack((istrain, is_train_0)) if istrain.size != 0 else is_train_0][0]
 
-	# Append to grand list
-	joints2d = [np.vstack((joints2d, j2d)) if joints2d.size != 0 else j2d][0]
-	joints3d = [np.vstack((joints3d, j3d)) if joints3d.size != 0 else j3d][0]	
-	image_names = [np.vstack((image_names, im_names)) if image_names.size != 0 else im_names][0]
-	folder_names = [np.vstack((folder_names, fold_name)) if folder_names.size != 0 else fold_name][0]
+    # Append to grand list
+    joints2d = [np.vstack((joints2d, j2d)) if joints2d.size != 0 else j2d][0]
+    joints3d = [np.vstack((joints3d, j3d)) if joints3d.size != 0 else j3d][0]   
+    image_names = [np.vstack((image_names, im_names)) if image_names.size != 0 else im_names][0]
+    folder_names = [np.vstack((folder_names, fold_name)) if folder_names.size != 0 else fold_name][0]
 
 # Correct encoding for string arrays
 image_names = np.chararray.encode(image_names, encoding='utf8')
@@ -72,6 +76,7 @@ f['joint_3d_mono'] = joints3d
 f['image_name'] = image_names
 f['folder_name'] = folder_names
 f['id'] = ids
+f['istrain'] = istrain
 f.attrs['synthetic_folder'] = np.string_(SYNTHETIC_FOLDER)
 f.close()
 
