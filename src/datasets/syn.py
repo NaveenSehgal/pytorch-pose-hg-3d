@@ -7,6 +7,10 @@ import cv2
 from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform3D
 
+syn_parts_list = ['root', 'head', 'upperArm.L', 'lowerArm.L', 'palm.L', 'upperArm.R', 'lowerArm.R', 'palm.R',
+             'upperLeg.L', 'lowerLeg.L', 'foot.L', 'upperLeg.R', 'lowerLeg.R', 'foot.R']
+
+
 class Synthetic(data.Dataset):
     def __init__(self, opt, split):
         print '==> Initializing 3D synthetic {} data'.format(split)
