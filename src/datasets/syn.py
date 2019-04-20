@@ -6,6 +6,7 @@ from h5py import File
 import cv2
 from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform3D
+import os
 
 syn_parts_list = ['root', 'head', 'upperArm.L', 'lowerArm.L', 'palm.L', 'upperArm.R', 'lowerArm.R', 'palm.R',
              'upperLeg.L', 'lowerLeg.L', 'foot.L', 'upperLeg.R', 'lowerLeg.R', 'foot.R']
@@ -16,6 +17,7 @@ class Synthetic(data.Dataset):
         print '==> Initializing 3D synthetic {} data'.format(split)
         annot = {}
         f =	File('../data/synthetic/synthetic_annot.h5')
+        tags = ['folder_name', 'id', 'image_name', 'istrain', 'joint_2d', 'joint_3d_mono']
         for tag in tags:
             annot[tag] = np.asarray(f[tag]).copy()
 
@@ -28,13 +30,15 @@ class Synthetic(data.Dataset):
         self.annot = annot
         self.nSamples = len(self.annot['id'])      
         self.root = 0  # double check!
+        self.nJoints=16
         print 'Loaded 3D {} {} samples'.format(split, len(self.annot['id']))
 
 
     def LoadImage(self, index):
-        sub_folder = annot['folder_name'][index][0].decode('utf-8') 
-        image_name = annot['image_name'][index][0].decode('utf-8')
-        image_path = os.path.join(os.path.join(self.folder, sub_folder), image_name)
+        sub_folder = self.annot['folder_name'][index][0].decode('utf-8') 
+        image_name = self.annot['image_name'][index][0].decode('utf-8')
+        image_path = os.path.join(os.path.join(os.path.join(self.folder, sub_folder), 'images'), image_name)
+        #print image_path
         img = cv2.imread(image_path)  # TBD if need to resize images
         return img
 
@@ -85,5 +89,5 @@ class Synthetic(data.Dataset):
         inp = torch.from_numpy(inp)
         return inp, outMap, outReg, pts_3d_mono
 
-    def __len__(self)
+    def __len__(self):
         return self.nSamples

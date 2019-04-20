@@ -10,6 +10,7 @@ from models.hg_3d import HourglassNet3D
 from utils.utils import adjust_learning_rate
 from datasets.fusion import Fusion
 from datasets.h36m import H36M
+from datasets.syn import Synthetic
 from datasets.mpii import MPII
 from utils.logger import Logger
 from train import train, val
@@ -41,7 +42,7 @@ def main():
     )
   else:
     val_loader = torch.utils.data.DataLoader(
-        H36M(opt, 'val'), 
+        Synthetic(opt, 'val'), 
         batch_size = 1, 
         shuffle = False,
         num_workers = int(ref.nThreads)
