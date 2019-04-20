@@ -11,8 +11,10 @@ class Fusion(data.Dataset):
   def __init__(self, opt, split):
     self.ratio3D = opt.ratio3D
     self.split = split
-    #self.dataset3D = H36M(opt, split)
-    self.dataset3D = Synthetic(opt, split)
+    if opt.useSyn == True:
+        self.dataset3D = Synthetic(opt, split)
+    else:
+        self.dataset3D = HM36M(opt, split)
     self.dataset2D = MPII(opt, split, returnMeta = True)
     self.nImages2D = len(self.dataset2D)
     self.nImages3D = min(len(self.dataset3D), int(self.nImages2D * self.ratio3D))
