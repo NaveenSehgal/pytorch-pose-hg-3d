@@ -72,10 +72,9 @@ class Synthetic(data.Dataset):
 
         img = self.LoadImage(index)
         pts, c, s, pts_3d, pts_3d_mono = self.GetPartInfo(index)
-        # TODO: Normalize this bone????
-        pts_3d[7] = (pts_3d[12] + pts_3d[13]) / 2
+        pts_3d[7] = (pts_3d[12] + pts_3d[13]) / 2  # neck = average of shoulders
 
-        inp = Crop(img, c, s, 0, ref.inputRes) / 256.
+        inp = Crop(img, c, s, 0, ref.inputRes) / 256.  # crop image to input resolution
         outMap = np.zeros((ref.nJoints, ref.outputRes, ref.outputRes))  # nJoints x 64 x 64 heatmap for 2D
         outReg = np.zeros((ref.nJoints, 3))  # Regression target for 3D
 

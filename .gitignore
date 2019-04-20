@@ -5,7 +5,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# Stuff
+src/output
+exp/
+src/*.bash
+#C extensions
 *.so
 
 # Distribution / packaging
