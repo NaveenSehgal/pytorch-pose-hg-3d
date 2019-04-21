@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=s2_syn_test
-#SBATCH --mem=100Gb
-#SBATCH --gres=gpu:k40m:1
+#SBATCH --mem=50Gb
+#SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
 #SBATCH --output=../output/s2_syn_test.%j.out
 #SBATCH --error=../output/s2_syn_test.%j.err
