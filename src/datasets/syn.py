@@ -8,9 +8,6 @@ from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform3D
 import os
 
-syn_parts_list = ['root', 'head', 'upperArm.L', 'lowerArm.L', 'palm.L', 'upperArm.R', 'lowerArm.R', 'palm.R',
-             'upperLeg.L', 'lowerLeg.L', 'foot.L', 'upperLeg.R', 'lowerLeg.R', 'foot.R']
-
 
 class Synthetic(data.Dataset):
     def __init__(self, opt, split):
@@ -29,8 +26,8 @@ class Synthetic(data.Dataset):
         self.opt = opt
         self.annot = annot
         self.nSamples = len(self.annot['id'])      
-        self.root = 0  # double check!
-        self.nJoints=16
+        self.root = 7  # double check!
+        self.nJoints = 16
         print 'Loaded 3D {} {} samples'.format(split, len(self.annot['id']))
 
 
@@ -62,7 +59,7 @@ class Synthetic(data.Dataset):
         for j in range(self.nJoints):
             pts_3d[j, 0] = pts_3d[j, 0] * scale + pts[self.root, 0]
             pts_3d[j, 1] = pts_3d[j, 1] * scale + pts[self.root, 1]
-            pts_3d[j, 2] = pts_3d[j, 2] * scale + ref.h36mImgSize / 2
+            pts_3d[j, 2] = pts_3d[j, 2] * scale + ref.synImgSize / 2
     
         return pts, c, s, pts_3d, pts_3d_mono            
 
