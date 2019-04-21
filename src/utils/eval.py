@@ -50,7 +50,7 @@ def Accuracy(output, target):
   else:
     return avgAcc / (len(ref.accIdxs) - badIdxCount)
 
-def MPJPE(output2D, output3D, meta):
+def MPJPE(output2D, output3D, meta, opt):
   meta = meta.numpy()
   p = np.zeros((output2D.shape[0], ref.nJoints, 3))
   p[:, :, :2] = getPreds(output2D).copy()
@@ -66,9 +66,9 @@ def MPJPE(output2D, output3D, meta):
         p[i, j, 0] = p[i, j, 0] + 0.25 * (1 if diffX >=0 else -1)
         p[i, j, 1] = p[i, j, 1] + 0.25 * (1 if diffY >=0 else -1)
   p = p + 0.5
-  
   p[:, :, 2] = (output3D.copy() + 1) / 2 * ref.outputRes
   h36mSumLen = 4296.99233013
+  synSumLen = 4.140971735214678
   root = 6
   err = 0
   num3D = 0
@@ -81,7 +81,10 @@ def MPJPE(output2D, output3D, meta):
         lenPred += ((p[i, e[0]] - p[i, e[1]]) ** 2).sum() ** 0.5 
       pRoot = p[i, root].copy()
       for j in range(ref.nJoints):
-        p[i, j] = (p[i, j] - pRoot) / lenPred * h36mSumLen + meta[i, root]
+        if opt.useSyn == True:
+            p[i, j] = (p[i, j] - pRoot) / lenPred * synSumLen + meta[i, root]
+        else:
+            p[i, j] = (p[i, j] - pRoot) / lenPred * h36mSumLen + meta[i, root]
       p[i, 7] = (p[i, 6] + p[i, 8]) / 2
       for j in range(ref.nJoints):
         dis = ((p[i, j] - meta[i, j]) ** 2).sum() ** 0.5

@@ -8,11 +8,7 @@ edges = [[0, 1], [1, 2], [2, 6], [6, 3], [3, 4], [4, 5],
 
 syn_parts_list = ['root', 'head', 'upperArm.L', 'lowerArm.L', 'palm.L', 'upperArm.R', 'lowerArm.R', 'palm.R',
              'upperLeg.L', 'lowerLeg.L', 'foot.L', 'upperLeg.R', 'lowerLeg.R', 'foot.R']
-syn_edges = [
-  
 
-
-]
 h36mImgSize = 224
 synImgSize = 512
 
@@ -40,3 +36,4 @@ h36mImgDir = '/scratch/sehgal.n/h36m/pose-hg-3d-images/'
 expDir = '../exp'
 
 nThreads = 4
+

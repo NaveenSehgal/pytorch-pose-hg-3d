@@ -42,7 +42,7 @@ def step(split, epoch, opt, dataLoader, model, criterion, optimizer = None):
 
     Loss.update(loss.data[0], input.size(0))
     Acc.update(Accuracy((output[opt.nStack - 1].data).cpu().numpy(), (target2D_var.data).cpu().numpy()))
-    mpjpe, num3D = MPJPE((output[opt.nStack - 1].data).cpu().numpy(), (reg.data).cpu().numpy(), meta)
+    mpjpe, num3D = MPJPE((output[opt.nStack - 1].data).cpu().numpy(), (reg.data).cpu().numpy(), meta, opt)
     if num3D > 0:
       Mpjpe.update(mpjpe, num3D)
     if split == 'train':
