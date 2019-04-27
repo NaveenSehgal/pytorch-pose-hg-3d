@@ -41,12 +41,20 @@ def main():
         num_workers = int(ref.nThreads)
     )
   else:
-    val_loader = torch.utils.data.DataLoader(
-        Synthetic(opt, 'val'), 
-        batch_size = 1, 
-        shuffle = False,
-        num_workers = int(ref.nThreads)
-    )
+    if opt.useSyn:
+        val_loader = torch.utils.data.DataLoader(
+            Synthetic(opt, 'val'), 
+            batch_size = 1, 
+            shuffle = False,
+            num_workers = int(ref.nThreads)
+        )
+    else:
+        val_loader = torch.utils.data.DataLoader(
+            H36M(opt, 'val'),
+            batch_size=1,
+            shuffle=False,
+            num_workers = int(ref.nThreads)
+        )
   
 
   if opt.test:
