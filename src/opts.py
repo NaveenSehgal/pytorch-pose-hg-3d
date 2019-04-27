@@ -10,7 +10,7 @@ class opts():
     self.parser.add_argument('-expID', default = 'default', help = 'Experiment ID')
     self.parser.add_argument('-test', action = 'store_true', help = 'test')
     self.parser.add_argument('-DEBUG', type = int, default = 0, help = 'DEBUG level')
-    self.parser.add_argument('-demo', default = '', help = 'path/to/demo/image')
+    self.parser.add_argument('-demo', default = '/home/sehgal.n/3d_pose/pytorch-pose-hg-3d/images/h36m_1214.png', help='/path/to/image.png')
     
     self.parser.add_argument('-loadModel', default = 'none', help = 'Provide full path to a previously trained model')
     self.parser.add_argument('-nFeats', type = int, default = 256, help = '# features in the hourglass')
@@ -28,7 +28,9 @@ class opts():
     self.parser.add_argument('-regWeight', type = float, default = 0, help = 'depth regression loss weight')
     self.parser.add_argument('-varWeight', type = float, default = 0, help = 'variance loss weight')
     self.parser.add_argument('-useSyn', action = 'store_true', default = False, help = 'use if want to use the synthetic data') 
-    
+    self.parser.add_argument('-mm', action = 'store_true', default = False, help = 'use mm instead of m (for synthetic data only)')
+    self.parser.add_argument('-nosynsum', action = 'store_true', default = False)
+
   def parse(self):
     self.init()  
     self.opt = self.parser.parse_args()

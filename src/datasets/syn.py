@@ -46,6 +46,8 @@ class Synthetic(data.Dataset):
         c = np.ones(2) * ref.synImgSize / 2
         s = ref.synImgSize * 1.0
 
+        if self.opt.mm:
+            pts_3d = pts_3d * 1000
         pts_3d = pts_3d - pts_3d[self.root]
 
         # Normalize 

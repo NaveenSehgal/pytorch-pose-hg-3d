@@ -69,6 +69,11 @@ def MPJPE(output2D, output3D, meta, opt):
   p[:, :, 2] = (output3D.copy() + 1) / 2 * ref.outputRes
   h36mSumLen = 4296.99233013
   synSumLen = 4.140971735214678
+  if opt.nosynsum:
+    synSumLen = h36mSumLen
+  if opt.mm:
+    #h36mSumLen *= 1000
+    synSumLen *= 1000
   root = 6
   err = 0
   num3D = 0

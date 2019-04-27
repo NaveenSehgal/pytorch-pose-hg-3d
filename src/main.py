@@ -34,6 +34,7 @@ def main():
                                   momentum = ref.momentum)
 
   if opt.ratio3D < ref.eps:
+    print 'Using MPII as validation set'
     val_loader = torch.utils.data.DataLoader(
         MPII(opt, 'val', returnMeta = True), 
         batch_size = 1, 
@@ -41,6 +42,7 @@ def main():
         num_workers = int(ref.nThreads)
     )
   else:
+    print 'Using 3D dataset as validation set'
     if opt.useSyn:
         val_loader = torch.utils.data.DataLoader(
             Synthetic(opt, 'val'), 
@@ -51,7 +53,7 @@ def main():
     else:
         val_loader = torch.utils.data.DataLoader(
             H36M(opt, 'val'),
-            batch_size=1,
+            batch_size = 1,
             shuffle=False,
             num_workers = int(ref.nThreads)
         )
