@@ -42,16 +42,17 @@ class Synthetic(data.Dataset):
     def GetPartInfo(self, index):
         pts = self.annot['joint_2d'][index].copy()
         pts_3d = self.annot['joint_3d_mono'][index].copy()
+        
+        if self.opt.mm:
+            pts_3d = pts_3d * 1000
+
         pts_3d_mono = self.annot['joint_3d_mono'][index].copy()
         c = np.ones(2) * ref.synImgSize / 2
         s = ref.synImgSize * 1.0
 
-        if self.opt.mm:
-            pts_3d = pts_3d * 1000
         pts_3d = pts_3d - pts_3d[self.root]
 
         # Normalize 
-        # TODO: Update edges
         s2d, s3d = 0, 0
         for e in ref.edges:
             s2d += ((pts[e[0]] - pts[e[1]]) ** 2).sum() ** 0.5
