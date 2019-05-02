@@ -56,8 +56,8 @@ class opts():
       for k, v in sorted(refs.items()):
          opt_file.write('  %s: %s\n' % (str(k), str(v)))
 
-    if opt.gaussBlur and opt.whiteNoise:
-      print "Can't do both gaussian blur and white noise!"
+    if self.opt.gaussBlur and self.opt.whiteNoise:
+      print "Can't do both gaussian blur and white noise at same time!"
       exit(0)
       
     return self.opt
