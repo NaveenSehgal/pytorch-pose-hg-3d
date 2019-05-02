@@ -6,6 +6,7 @@ from h5py import File
 import cv2
 from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform
+from utils.noise import gaussian_blur, white_noise
 
 class MPII(data.Dataset):
   def __init__(self, opt, split, returnMeta = False):
@@ -27,6 +28,13 @@ class MPII(data.Dataset):
   def LoadImage(self, index):
     path = '{}/{}'.format(ref.mpiiImgDir, self.annot['imgname'][index])
     img = cv2.imread(path)
+
+    # Preprocessing 
+    if self.opt.gaussBlur:
+        img = gaussian_blur(img)
+    elif self.opt.whiteNoise:
+        img = white_noise(img)
+
     return img
   
   def GetPartInfo(self, index):

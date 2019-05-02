@@ -6,6 +6,7 @@ from h5py import File
 import cv2
 from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform3D
+from utils.noise import gaussian_blur, white_noise
 
 class H36M(data.Dataset):
   def __init__(self, opt, split):
@@ -35,6 +36,13 @@ class H36M(data.Dataset):
     path = '{}/{}/{}_{:06d}.jpg'.format(ref.h36mImgDir, folder, folder, self.annot['id'][index])
     #print 'path', path
     img = cv2.imread(path)
+
+    # Preprocessing 
+    if self.opt.gaussBlur:
+        img = gaussian_blur(img)
+    elif self.opt.whiteNoise:
+        img = white_noise(img)
+
     return img
   
   def GetPartInfo(self, index):

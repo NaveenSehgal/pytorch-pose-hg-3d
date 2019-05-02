@@ -30,6 +30,9 @@ class opts():
     self.parser.add_argument('-useSyn', action = 'store_true', default = False, help = 'use if want to use the synthetic data') 
     self.parser.add_argument('-mm', action = 'store_true', default = False, help = 'use mm instead of m (for synthetic data only)')
     self.parser.add_argument('-nosynsum', action = 'store_true', default = False)
+    self.parser.add_argument('-gaussBlur', action = 'store_true', default = False)
+    self.parser.add_argument('-whiteNoise', action = 'store_true', default = False)
+
 
   def parse(self):
     self.init()  
@@ -52,4 +55,9 @@ class opts():
       opt_file.write('==> Args:\n')
       for k, v in sorted(refs.items()):
          opt_file.write('  %s: %s\n' % (str(k), str(v)))
+
+    if opt.gaussBlur and opt.whiteNoise:
+      print "Can't do both gaussian blur and white noise!"
+      exit(0)
+      
     return self.opt

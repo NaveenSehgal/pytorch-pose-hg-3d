@@ -7,6 +7,7 @@ import cv2
 from utils.utils import Rnd, Flip, ShuffleLR
 from utils.img import Crop, DrawGaussian, Transform3D
 import os
+from utils.noise import gaussian_blur, white_noise
 
 
 class Synthetic(data.Dataset):
@@ -35,8 +36,14 @@ class Synthetic(data.Dataset):
         sub_folder = self.annot['folder_name'][index][0].decode('utf-8') 
         image_name = self.annot['image_name'][index][0].decode('utf-8')
         image_path = os.path.join(os.path.join(os.path.join(self.folder, sub_folder), 'images'), image_name)
-        #print image_path
-        img = cv2.imread(image_path)  # TBD if need to resize images
+        img = cv2.imread(image_path)
+
+        # Preprocessing 
+        if self.opt.gaussBlur:
+            img = gaussian_blur(img)
+        elif self.opt.whiteNoise:
+            img = white_noise(img)
+
         return img
 
     def GetPartInfo(self, index):
