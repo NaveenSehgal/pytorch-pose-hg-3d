@@ -20,7 +20,7 @@ joints3d = f['joint_3d_mono'] # (n, 16, 3)
 ret = []
 sum_bones = 0
 
-for i, pose in tqdm(enumerate(joints3d)):
+for i, pose in tqdm(enumerate(joints3d[:10000])):
     sum_bones += get_bone_length(joints3d[i, :, :]) 
     ret.append(i)
 

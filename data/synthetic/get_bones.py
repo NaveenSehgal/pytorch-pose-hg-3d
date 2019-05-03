@@ -15,8 +15,9 @@ def get_bone_length(pts):
 data_file = '/home/sehgal.n/3d_pose/pytorch-pose-hg-3d/data/synthetic/synthetic_annot.h5'
 f = h5py.File(data_file, 'r')
 joints2d = f['joint_2d']
-joints3d = f['joint_3d_mono'] # (n, 16, 3)
+joints3d = f['joint_3d_mono'].value # (n, 16, 3)
 
+joints3d *= 845.049574860222
 ret = []
 sum_bones = 0
 
