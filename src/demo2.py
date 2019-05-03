@@ -50,6 +50,7 @@ def main():
     model = torch.load(opt.loadModel).cuda()
   else:
     model = torch.load('/home/sehgal.n/3d_pose/pytorch-pose-hg-3d/exp/hgreg-3d.pth').cuda()
+  opt.demo = '/scratch/sehgal.n/datasets/synthetic/SYN_RR_amir_180329_0624_G20190212_1843_P2000_A00/images/image_000001.png'
   img = cv2.imread(opt.demo)
   input = torch.from_numpy(img.transpose(2, 0, 1)).float() / 256.
   input = input.view(1, input.size(0), input.size(1), input.size(2))

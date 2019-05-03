@@ -7,5 +7,5 @@
 #SBATCH --error=../output/s2B0.%j.err
 
 cd ..
-python2 main.py -expID Stage2_SYN_bone -ratio3D 1 -regWeigh 0.1 -loadModel ../exp/Stage1_SYN_30/model_30.pth -nEpochs 10 -useSyn -nosynsum
+python2 main.py -expID Stage2_SYN_bone -ratio3D 1 -regWeigh 0.1 -loadModel ../exp/Stage1_SYN_30/model_30.pth -nEpochs 10 -useSyn -nosynsum -mm
 
