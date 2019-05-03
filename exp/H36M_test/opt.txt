@@ -1,0 +1,50 @@
+==> Args:
+  DEBUG: 0
+  LR: 0.00025
+  demo: /home/sehgal.n/3d_pose/pytorch-pose-hg-3d/images/h36m_1214.png
+  dropLR: 1000000
+  expID: H36M_test
+  gaussBlur: False
+  loadModel: ../exp/hgreg-3d.pth
+  mm: False
+  nEpochs: 60
+  nFeats: 256
+  nModules: 2
+  nRegModules: 2
+  nStack: 2
+  nosynsum: False
+  ratio3D: 1
+  regWeight: 0.01
+  saveDir: ../exp/H36M_test
+  test: True
+  trainBatch: 6
+  useSyn: False
+  valIntervals: 5
+  varWeight: 0.01
+  whiteNoise: False
+==> Args:
+  accIdxs: [0, 1, 2, 3, 4, 5, 10, 11, 14, 15]
+  alpha: 0.99
+  dataDir: ../data
+  disturb: 10
+  edges: [[0, 1], [1, 2], [2, 6], [6, 3], [3, 4], [4, 5], [10, 11], [11, 12], [12, 8], [8, 13], [13, 14], [14, 15], [6, 8], [8, 9]]
+  eps: 1e-06
+  epsilon: 1e-08
+  expDir: ../exp
+  h36mImgDir: /scratch/sehgal.n/h36m/pose-hg-3d-images/
+  h36mImgSize: 224
+  hmGauss: 1
+  hmGaussInp: 20
+  inputRes: 256
+  momentum: 0.0
+  mpiiImgDir: /scratch/sehgal.n/datasets/mpii/images/
+  nJoints: 16
+  nThreads: 4
+  outputRes: 64
+  rotate: 30
+  scale: 0.25
+  shiftPX: 50
+  shuffleRef: [[0, 5], [1, 4], [2, 3], [10, 15], [11, 14], [12, 13]]
+  synImgSize: 512
+  syn_parts_list: ['root', 'head', 'upperArm.L', 'lowerArm.L', 'palm.L', 'upperArm.R', 'lowerArm.R', 'palm.R', 'upperLeg.L', 'lowerLeg.L', 'foot.L', 'upperLeg.R', 'lowerLeg.R', 'foot.R']
+  weightDecay: 0.0
