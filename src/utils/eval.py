@@ -102,7 +102,12 @@ def MPJPE(output2D, output3D, meta, opt):
   # Average sum of bone lengths for a person in the dataset
   h36mSumLen = 4296.99233013
   synSumLen = 4.140971735214678
-
+  
+  if opt.scaleby100:
+      synSumLen = 414.09717352146373
+  if opt.test1:
+    synSumlen = 3499.3264043513427
+  
   # Flags for testing out this function 
   if opt.nosynsum:
     synSumLen = h36mSumLen

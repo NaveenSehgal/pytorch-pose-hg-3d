@@ -29,6 +29,10 @@ class Synthetic(data.Dataset):
         self.nSamples = len(self.annot['id'])      
         self.root = 7  # double check!
         self.nJoints = 16
+        
+        if opt.test1:
+            self.annot['joint_3d_mono'] *= 845.049574860222
+
         print 'Loaded 3D {} {} samples'.format(split, len(self.annot['id']))
 
 
