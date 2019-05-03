@@ -1,5 +1,5 @@
 *.DS_Store
-*.pth
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,7 +7,6 @@ __pycache__/
 
 # Stuff
 src/output
-exp/
 src/*.bash
 #C extensions
 *.so
