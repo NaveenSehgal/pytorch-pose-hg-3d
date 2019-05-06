@@ -25,7 +25,10 @@ import os
 import scipy.io as sio
 
 def convert(syn_joints):
-    ''' input format 14 x 2 '''
+    ''' 
+    Convert SYN to MPII joints
+    input format 14 x 2 
+    '''
     mpii_shape = list(syn_joints.shape)
     if syn_joints.shape[0] != 14:
         print('INCORRECT INPUT SHAPE INTO CONVERSION FUNCTION FROM SYN TO MPII')
@@ -33,7 +36,7 @@ def convert(syn_joints):
 
     mpii_shape[0] = 16
     mpii = np.zeros(mpii_shape)
-    mpii[[0,1,2,3,4,5,7, 9, 10, 11,12,13,14, 15]] = syn_joints[[0,1,2,3,4,5, 12, 13, 6, 7, 8, 9, 10, 11]]
+    mpii[[0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15]] = syn_joints[[0, 1, 2, 3, 4, 5, 12, 13, 6, 7, 8, 9, 10, 11]]
     mpii[6] = np.mean(syn_joints[2:4, :], axis=0)
     mpii[8] = syn_joints[12] + (syn_joints[13] - syn_joints[12]) / 3
 
@@ -43,11 +46,18 @@ def convert(syn_joints):
 SYNTHETIC_FOLDER = '/scratch/sehgal.n/datasets/synthetic'
 SAVE_PATH = '../../data/synthetic/'
 sub_folders = [os.path.join(SYNTHETIC_FOLDER, folder) for folder in os.listdir(SYNTHETIC_FOLDER) if os.path.isdir(os.path.join(SYNTHETIC_FOLDER, folder))]
-FRAC_TRAIN = 0.8  # Make this proportion of samples designated for training
 
-print('Loading the following folders: ')
-for fold in sub_folders:
-    print(fold)
+# Separate test subjects
+TEST_SUBJECTS = ['_kian_', '_yu_', '_boya_']  # test subject names
+is_subfolder_test = [[subject in x for x in sub_folders] for subject in TEST_SUBJECTS]  # Check if folder in sub_folders is for a test subject
+is_test = dict(zip(sub_folders, np.logical_or.reduce(is_subfolder_test)))  # Get a dictionary saying if each sub folder is a test subject
+
+# Print folders 
+print('Loading the following folders\n')
+print('Train:')
+[print(k) for k in is_test if not is_test.get(k)]
+print('\n\nTest:')
+[print(k) for k in is_test if is_test.get(k)]
 
 n_images = 0
 joints2d, joints3d, image_names, folder_names = np.array([]), np.array([]), np.array([]), np.array([])  # initialize empty arrays
@@ -72,7 +82,7 @@ for folder in sub_folders:
     stop_id = start_id + len(j2d)
     id_list = np.arange(start_id, stop_id)
     ids = np.append(ids, id_list)
-    is_train_0 = np.reshape((np.random.rand(len(j2d)) < FRAC_TRAIN).astype(int), (len(j2d), 1))
+    is_train_0 = np.full((len(j2d), 1), int(not is_test.get(folder)))
     istrain = [np.vstack((istrain, is_train_0)) if istrain.size != 0 else is_train_0][0]
 
     # Append to grand list

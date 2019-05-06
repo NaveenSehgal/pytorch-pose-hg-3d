@@ -21,20 +21,26 @@ class Synthetic(data.Dataset):
 
         self.folder = f.attrs['synthetic_folder'].decode('utf-8')
         f.close()
-                
+
+        # Choose only samples for the split (train or test)
+        in_split = np.ravel(annot['istrain'] == (1 if split == 'train' else 0))
+        ids = np.arange(annot['id'].shape[0])[in_split]
+        for tag in tags:
+            annot[tag] = annot[tag][ids]
+
+        # Store files in class variables        
         num_pictures = len(annot['joint_2d'])
         self.split = split
         self.opt = opt
         self.annot = annot
         self.nSamples = len(self.annot['id'])      
-        self.root = 7  # double check!
+        self.root = 7  
         self.nJoints = 16
         
         if opt.test1:
             self.annot['joint_3d_mono'] *= 845.049574860222
 
         print 'Loaded 3D {} {} samples'.format(split, len(self.annot['id']))
-
 
     def LoadImage(self, index):
         sub_folder = self.annot['folder_name'][index][0].decode('utf-8') 
@@ -95,7 +101,6 @@ class Synthetic(data.Dataset):
                 outMap[i] = DrawGaussian(outMap[i], pt[:2], ref.hmGauss)  # Draw 2D heat map for detection
 
             outReg[i, 2] = pt[2] / ref.outputRes * 2 - 1
-
         inp = torch.from_numpy(inp)
         return inp, outMap, outReg, pts_3d_mono
 
