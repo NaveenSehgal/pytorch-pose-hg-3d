@@ -31,6 +31,7 @@ class opts():
     self.parser.add_argument('-gaussBlur', action = 'store_true', default = False)
     self.parser.add_argument('-whiteNoise', action = 'store_true', default = False)
     self.parser.add_argument('-scaleMPJPE', action = 'store_true', default = False)
+    self.parser.add_argument('-allSYN', action = 'store_true', default = False)
 
   def parse(self):
     self.init()  

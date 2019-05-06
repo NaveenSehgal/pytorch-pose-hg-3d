@@ -12,6 +12,8 @@ from datasets.fusion import Fusion
 from datasets.h36m import H36M
 from datasets.syn import Synthetic
 from datasets.mpii import MPII
+from datasets.syn3d import Syn3D 
+from datasets.syn2d import Syn2D 
 from utils.logger import Logger
 from train import train, val
 import logging
@@ -34,18 +36,34 @@ def main():
                                   momentum = ref.momentum)
 
   if opt.ratio3D < ref.eps:
-    print 'Using MPII as validation set'
-    val_loader = torch.utils.data.DataLoader(
-        MPII(opt, 'val', returnMeta = True), 
-        batch_size = 1, 
-        shuffle = False,
-        num_workers = int(ref.nThreads)
-    )
+    if not opt.allSYN:
+      print 'Using MPII as validation set'
+      val_loader = torch.utils.data.DataLoader(
+          MPII(opt, 'val', returnMeta = True), 
+          batch_size = 1, 
+          shuffle = False,
+          num_workers = int(ref.nThreads)
+      )
+    else:
+      print 'Using SYN2D as validation set'
+      val_loader = torch.utils.data.DataLoader(
+          Syn2D(opt, 'val', returnMeta = True), 
+          batch_size = 1, 
+          shuffle = False,
+          num_workers = int(ref.nThreads)
+      )
   else:
     print 'Using 3D dataset as validation set'
-    if opt.useSyn:
+    if opt.useSyn and not opt.allSYN:
         val_loader = torch.utils.data.DataLoader(
             Synthetic(opt, 'val'), 
+            batch_size = 1, 
+            shuffle = False,
+            num_workers = int(ref.nThreads)
+        )
+    elif opt.allSYN:
+        val_loader = torch.utils.data.DataLoader(
+            Syn3D(opt, 'val'), 
             batch_size = 1, 
             shuffle = False,
             num_workers = int(ref.nThreads)
