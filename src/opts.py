@@ -28,12 +28,9 @@ class opts():
     self.parser.add_argument('-regWeight', type = float, default = 0, help = 'depth regression loss weight')
     self.parser.add_argument('-varWeight', type = float, default = 0, help = 'variance loss weight')
     self.parser.add_argument('-useSyn', action = 'store_true', default = False, help = 'use if want to use the synthetic data') 
-    self.parser.add_argument('-mm', action = 'store_true', default = False, help = 'use mm instead of m (for synthetic data only)')
-    self.parser.add_argument('-nosynsum', action = 'store_true', default = False)
     self.parser.add_argument('-gaussBlur', action = 'store_true', default = False)
     self.parser.add_argument('-whiteNoise', action = 'store_true', default = False)
-    self.parser.add_argument('-test1', action = 'store_true', default = False)
-    self.parser.add_argument('-scaleby100', action = 'store_true', default = False)
+    self.parser.add_argument('-scaleMPJPE', action = 'store_true', default = False)
 
   def parse(self):
     self.init()  

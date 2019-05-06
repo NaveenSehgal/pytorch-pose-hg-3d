@@ -103,18 +103,6 @@ def MPJPE(output2D, output3D, meta, opt):
   h36mSumLen = 4296.99233013
   synSumLen = 4.140971735214678
   
-  if opt.scaleby100:
-      synSumLen = 414.09717352146373
-  if opt.test1:
-    synSumlen = 3499.3264043513427
-  
-  # Flags for testing out this function 
-  if opt.nosynsum:
-    synSumLen = h36mSumLen
-  if opt.mm:
-    #h36mSumLen *= 1000
-    synSumLen *= 1000
-  
   # Initialize index of root joint, and err, num3D to 0
   root = 6
   err = 0  # Contain sum of mpjpe errors 
@@ -152,12 +140,14 @@ def MPJPE(output2D, output3D, meta, opt):
         else:
             p[i, j] = (p[i, j] - pRoot) / lenPred * h36mSumLen + meta[i, root]
       
-      p[i, 7] = (p[i, 6] + p[i, 8]) / 2  # TODO: neck is average of shoulders?
+      p[i, 7] = (p[i, 6] + p[i, 8]) / 2 
       
       # For each joint
+      scale = [1 if not (opt.useSyn and opt.scaleMPJPE) else 1000][0]  # Scale distance for MPJPE calculation
       for j in range(ref.nJoints):
       	# Calculate the sqrt. of the sum of squared distances
-        dis = ((p[i, j] - meta[i, j]) ** 2).sum() ** 0.5
+        distance = p[i, j] - meta[i, j]
+        dis = ((distance * scale) ** 2).sum() ** 0.5
 
         # Add the average error per joint to the err variable
         err += dis / ref.nJoints

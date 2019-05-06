@@ -7,7 +7,7 @@
 #SBATCH --error=../output/test_syn.%j.err
 
 cd ..
-python2 main.py -expID SYN_test -loadModel ../exp/Stage3_SYN_test_0/model_10.pth -test -useSyn -ratio3D 1 -nosynsum
+python2 main.py -expID SYN_test -loadModel ../exp/Stage3_SYN_test_0/model_10.pth -test -useSyn -ratio3D 1 -scaleMPJPE
 # -ratio3D 1 
 # -regWeigh 0.1 -varWeight 0.01 -loadModel ../exp/hgreg-3d.pth -LR 2.5e-5 -nEpochs 0 -test
 
