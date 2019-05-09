@@ -7,5 +7,5 @@
 #SBATCH --error=../output/s1_MP20.%j.err
 
 cd ..
-python2 main.py -expID S1_mpii_20 -nEpochs 20 -loadModel ../exp/S1_mpii/model_20.pth -useSyn
+python2 main.py -expID S1_mpii_20 -nEpochs 30 -loadModel ../exp/S1_mpii/model_20.pth -useSyn
 

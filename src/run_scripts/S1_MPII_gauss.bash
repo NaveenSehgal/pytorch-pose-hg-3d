@@ -7,5 +7,5 @@
 #SBATCH --error=../output/s1_MP_G.%j.err
 
 cd ..
-python2 main.py -expID S1_mpii_gauss -nEpochs 20 -useSyn -gaussBlur
+python2 main.py -expID S1_mpii_gauss -nEpochs 30 -useSyn -gaussBlur
 
