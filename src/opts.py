@@ -58,5 +58,7 @@ class opts():
     if self.opt.gaussBlur and self.opt.whiteNoise:
       print "Can't do both gaussian blur and white noise at same time!"
       exit(0)
-      
+    
+    print "*** Reg Weight: {}\t\tVar Weight: {} ***".format(self.opt.regWeight, self.opt.varWeight)
+  
     return self.opt
