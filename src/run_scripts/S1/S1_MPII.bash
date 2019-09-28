@@ -7,5 +7,6 @@
 #SBATCH --error=../output/s1_MP.%j.err
 
 cd ..
+cd ..
 python2 main.py -expID S1_mpii -nEpochs 20 -useSyn
 

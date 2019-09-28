@@ -7,5 +7,5 @@
 #SBATCH --error=../output/s1_S_G55.%j.err
 
 cd ..
-python2 main.py -expID S1_syn_gauss_55 -nEpochs 20 -loadModel ../exp/S1_syn_gauss_35/model_20.pth -allSYN -gaussBlur
+python2 main.py -expID S1_syn_gauss_55 -nEpochs 5 -loadModel ../exp/S1_syn_gauss_35/model_20.pth -allSYN -gaussBlur
 

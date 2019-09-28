@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=s1_MP_W30
+#SBATCH --job-name=s1_MP_W45
 #SBATCH --mem=50Gb
 #SBATCH --gres=gpu:k40m:1
 #SBATCH --partition=gpu
